@@ -1,6 +1,9 @@
 using Company.Data.Contexts;
+using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Repository.Repositories;
+using Company.Service.Interfaces;
+using Company.Service.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace MVCProjects
@@ -19,6 +22,11 @@ namespace MVCProjects
             
             });
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IGeneicRepositoryy<Department>, GenericRepository<Department>>();
+            builder.Services.AddScoped<IGeneicRepositoryy<Employee>, GenericRepository<Employee>>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
