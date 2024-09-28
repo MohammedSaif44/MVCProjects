@@ -45,16 +45,43 @@ namespace MVCProjects.Controllers
             }
 
         }
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id,string viewname="Details")
         {
             var dept = departmentService.GetById(id);
             if (dept is null)
             {
                 return NotFound();
             }
-            return View(dept);
+            return View(viewname, dept);
         
-            return View();
+            
+        }
+        [HttpGet]
+        public IActionResult Update(int ?id)
+        {
+            return Details(id,"Update");
+        }
+        [HttpPost]
+        public IActionResult Update(int?id,Department department)
+        {
+           if(department.ID!=id.Value)
+            
+                return RedirectToAction("NotFoundPage",null,"Home");
+              
+            
+            departmentService.Update(department);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Delete(int? id)
+        {
+            var dept = departmentService.GetById(id);
+            if (dept is null)
+                return RedirectToAction("NotFoundPage", null, "Home");
+            dept.IsDeleted = true;
+            departmentService.Update(dept);
+            //departmentService.Delete(dept);
+            return RedirectToAction(nameof(Index));
+          
         }
     }
 }
