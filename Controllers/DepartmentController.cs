@@ -1,6 +1,7 @@
 ﻿using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Repository.Repositories;
+using Company.Service.Dto;
 using Company.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,7 @@ namespace MVCProjects.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Department department)
+        public IActionResult Create(DepartmentDto department)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace MVCProjects.Controllers
             }
 
         }
-        public IActionResult Details(int? id,string viewname="Details")
+        public IActionResult Details(int id,string viewname="Details")
         {
             var dept = departmentService.GetById(id);
             if (dept is null)
@@ -57,28 +58,28 @@ namespace MVCProjects.Controllers
             
         }
         [HttpGet]
-        public IActionResult Update(int ?id)
-        {
-            return Details(id,"Update");
-        }
-        [HttpPost]
-        public IActionResult Update(int?id,Department department)
-        {
-           if(department.ID!=id.Value)
+        //public IActionResult Update(int ?id)
+        //{
+        //    return Details(id,"Update");
+        //}
+        //[HttpPost]
+        //public IActionResult Update(int?id,Department department)
+        //{
+        //   if(department.ID!=id.Value)
             
-                return RedirectToAction("NotFoundPage",null,"Home");
+        //        return RedirectToAction("NotFoundPage",null,"Home");
               
             
-            departmentService.Update(department);
-            return RedirectToAction(nameof(Index));
-        }
-        public IActionResult Delete(int? id)
+        //    departmentService.Update(department);
+        //    return RedirectToAction(nameof(Index));
+        //}
+        public IActionResult Delete(int id)
         {
             var dept = departmentService.GetById(id);
             if (dept is null)
                 return RedirectToAction("NotFoundPage", null, "Home");
-            dept.IsDeleted = true;
-            departmentService.Update(dept);
+            //dept.IsDeleted = true;
+            //departmentService.Update(dept);
             //departmentService.Delete(dept);
             return RedirectToAction(nameof(Index));
           

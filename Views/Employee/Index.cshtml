@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model IEnumerable<Employee>
+@model IEnumerable<EmployeeDto>
 <h1>All Employee</h1>
 </br>
 </br>
@@ -42,6 +42,9 @@
             {
                 <tr>
                     <td>@Employee.Name</td>
+                    <td>
+                        <img src="~/Files/Images/@Employee.ImgUrl" height="40" width="40" alt="Alternate Text" />
+                    </td>
                      <td>@Employee.Age</td>
                     <td>@Employee.Address</td>
                     <td>@Html.DisplayFor(M => Employee.Salary)</td>

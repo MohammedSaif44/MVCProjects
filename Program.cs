@@ -3,7 +3,9 @@ using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Repository.Repositories;
 using Company.Service.Interfaces;
+using Company.Service.Mapping;
 using Company.Service.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MVCProjects
@@ -28,6 +30,37 @@ namespace MVCProjects
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IGeneicRepositoryy<Department>, GenericRepository<Department>>();
             builder.Services.AddScoped<IGeneicRepositoryy<Employee>, GenericRepository<Employee>>();
+            builder.Services.AddAutoMapper(x => x.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(x => x.AddProfile(new DepartmentProfile()));
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredUniqueChars = 2;
+                config.Password.RequireDigit = true;
+                config.Password.RequireLowercase = true;
+                config.Password.RequireUppercase = true;
+                config.Password.RequireNonAlphanumeric = true;
+                config.User.RequireUniqueEmail = true;
+                config.Lockout.AllowedForNewUsers = true;
+                config.Lockout.MaxFailedAccessAttempts = 3;
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+
+
+
+            }).AddEntityFrameworkStores<CompanyDbContext>()
+            .AddDefaultTokenProviders();
+            builder.Services.ConfigureApplicationCookie(options =>
+
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+                options.LogoutPath = "/Account/Logout";
+                options.LoginPath= "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccrssDenied";
+
+
+
+            });
 
             var app = builder.Build();
 
@@ -43,7 +76,7 @@ namespace MVCProjects
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
